@@ -1,0 +1,27 @@
+[
+  {
+    "clazz": "gnome-terminal",
+    "run": "gnome-terminal --window --working-directory ~",
+    "key": "t"
+  },
+  {
+    "clazz": "google-chrome",
+    "run": "google-chrome",
+    "key": "b"
+  },
+  {
+    "clazz": "gnote",
+    "run": "gnote",
+    "key": "g"
+  },
+  {
+    "clazz": "jetbrains-idea",
+    "run": "idea",
+    "key": "i"
+  },
+  {
+    "clazz": "jetbrains-clion",
+    "run": "clion",
+    "key": "u"
+  }
+]
