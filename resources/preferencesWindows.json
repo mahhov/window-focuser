@@ -1,0 +1,22 @@
+[
+  {
+    "clazz": "cmd",
+    "run": "cmd",
+    "key": "t"
+  },
+  {
+    "clazz": "chrome",
+    "run": "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe",
+    "key": "b"
+  },
+  {
+    "clazz": "idea64",
+    "run": "C:/Users/manukh/AppData/Local/JetBrains/IntelliJ IDEA 2018.3.4/bin/idea64.exe",
+    "key": "i"
+  },
+  {
+    "clazz": "clion64",
+    "run": "C:/Users/manukh/AppData/Local/JetBrains/CLion 2018.3.4/bin/clion64.exe",
+    "key": "u"
+  }
+]
