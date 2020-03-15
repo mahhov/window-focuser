@@ -29,7 +29,7 @@
       "resources",
       "src"
     ],
-    "icon": "./resources/todo-icon.png",
+    "icon": "./resources/hat-wizard-solid.png",
     "linux": {
       "target": "AppImage"
     }
