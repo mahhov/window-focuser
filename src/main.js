@@ -1,18 +1,24 @@
 require('./initProto');
 const os = require('os');
 const path = require('path');
+const {shell} = require('electron');
 const {TrayHelper, keyHook} = require('js-desktop-base');
+const appData = require('./appData');
 
-// todo tray icon for changing preferences
 let trayIcon = path.join(__dirname, '../resources/hat-wizard-solid.png');
-TrayHelper.createExitTray(trayIcon, 'Switcher');
+let trayMenuOptions = [
+	{label: 'Edit Shortcuts', click: () => shell.openExternal(appData.preferencesPath)},
+	{label: 'Reload Shortcuts', click: () => preferences = appData.reloadPreferences()},
+];
+TrayHelper.createExitTray(trayIcon, 'Switcher', trayMenuOptions);
 
-let setupLinuxShortcuts = () => {
-	const preferences = require('../resources/preferencesLinux'); // todo move outside project dir
+let preferences = appData.reloadPreferences();
+
+let setupLinuxShortcuts = async () => {
 	const Focuser = require('./osScript/WindowsUtilityLinux');
 	let focuser = new Focuser();
 
-	preferences.forEach(({clazz, run, key}) =>
+	(await preferences).forEach(({clazz, run, key}) =>
 		keyHook.addShortcut('{SUPER}', key, () =>
 			WindowsUtility.focusOrCreateFromClass(clazz, run)));
 
@@ -28,12 +34,11 @@ let setupLinuxShortcuts = () => {
 	keyHook.addShortcut('{CTRL}{SHIFT}{ALT}', '{DOWN}', () => WindowsUtility.moveWorkspace(1));
 };
 
-let setupWindowsShortcuts = () => {
-	const preferences = require('../resources/preferencesWindows'); // todo move outside project dir
-	// const Focuser = require('./osScript/WindowFocuserWindows');
+let setupWindowsShortcuts = async () => {
+	const Focuser = require('./osScript/WindowFocuserWindows');
 	let focuser = new Focuser();
 
-	preferences.forEach(({clazz, run, key}) =>
+	(await preferences).forEach(({clazz, run, key}) =>
 		keyHook.addShortcut('{ALT}{CTRL}', key, () =>
 			focuser.focusOrCreateFromClass(clazz, run)));
 };
