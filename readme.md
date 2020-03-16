@@ -1,4 +1,4 @@
-# App Switcher
+# Window Focuser
 
 Switches to a specific app, or starts the app if not opened.
 
