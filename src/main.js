@@ -4,21 +4,22 @@ const path = require('path');
 const {shell} = require('electron');
 const {TrayHelper, keyHook} = require('js-desktop-base');
 const appData = require('./appData');
+const isLinux = os.platform() === 'linux';
+const Focuser = require(isLinux ? './osScript/WindowsUtilityLinux' : './osScript/WindowFocuserWindows');
 
-let trayIcon = path.join(__dirname, '../resources/hat-wizard-solid.png');
-let trayMenuOptions = [
-	{label: 'Edit Shortcuts', click: () => shell.openExternal(appData.preferencesPath)},
-	{label: 'Reload Shortcuts', click: () => preferences = appData.reloadPreferences()},
-];
-TrayHelper.createExitTray(trayIcon, 'Switcher', trayMenuOptions);
+let focuser = new Focuser();
 
-let preferences = appData.reloadPreferences();
+let reloadPreferences = async () => {
+	let preferences = await appData.reloadPreferences();
+	keyHook.clearShortcuts();
+	if (isLinux)
+		setupLinuxShortcuts(preferences);
+	else
+		setupWindowsShortcuts(preferences);
+};
 
-let setupLinuxShortcuts = async () => {
-	const Focuser = require('./osScript/WindowsUtilityLinux');
-	let focuser = new Focuser();
-
-	(await preferences).forEach(({clazz, run, key}) =>
+let setupLinuxShortcuts = preferences => {
+	preferences.forEach(({clazz, run, key}) =>
 		keyHook.addShortcut('{SUPER}', key, () =>
 			WindowsUtility.focusOrCreateFromClass(clazz, run)));
 
@@ -34,16 +35,16 @@ let setupLinuxShortcuts = async () => {
 	keyHook.addShortcut('{CTRL}{SHIFT}{ALT}', '{DOWN}', () => WindowsUtility.moveWorkspace(1));
 };
 
-let setupWindowsShortcuts = async () => {
-	const Focuser = require('./osScript/WindowFocuserWindows');
-	let focuser = new Focuser();
-
-	(await preferences).forEach(({clazz, run, key}) =>
+let setupWindowsShortcuts = preferences =>
+	preferences.forEach(({clazz, run, key}) =>
 		keyHook.addShortcut('{ALT}{CTRL}', key, () =>
 			focuser.focusOrCreateFromClass(clazz, run)));
-};
 
-if (os.platform() === 'linux')
-	setupLinuxShortcuts();
-else
-	setupWindowsShortcuts();
+let trayIcon = path.join(__dirname, '../resources/hat-wizard-solid.png');
+let trayMenuOptions = [
+	{label: 'Edit Shortcuts', click: () => shell.openExternal(appData.preferencesPath)},
+	{label: 'Reload Shortcuts', click: reloadPreferences},
+];
+TrayHelper.createExitTray(trayIcon, 'Switcher', trayMenuOptions);
+
+reloadPreferences();
