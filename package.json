@@ -4,7 +4,8 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "build": "rm -rf dist; electron-builder ."
+    "build": "rm -rf dist; electron-builder .",
+    "ship": "build --win -p always"
   },
   "keywords": [
     "linux",
