@@ -8,7 +8,7 @@ const switchClazzLinux = require('./osScript/switchClazzLinux.js');
 
 let reloadPreferences = async () => {
 	let preferences = await appData.reloadPreferences();
-	keyHook.shortcuts = [];
+	keyHook.clearShortcuts();
 	if (os.platform() === 'linux')
 		preferences.forEach(({clazz, run, key}) =>
 			keyHook.addShortcut('{SUPER}', key, () => switchClazzLinux(clazz, run)));
@@ -22,7 +22,7 @@ let reloadPreferences = async () => {
 
 let trayIcon = path.join(__dirname, '../resources/hat-wizard-solid.png');
 let trayMenuOptions = [
-	{label: 'Edit Shortcuts', click: () => shell.openExternal(appData.preferencesPath)},
+	{label: 'Edit Shortcuts', click: () => shell.openPath(appData.preferencesPath)},
 	{label: 'Reload Shortcuts', click: reloadPreferences},
 ];
 TrayHelper.createExitTray(trayIcon, 'Switcher', trayMenuOptions);
