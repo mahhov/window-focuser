@@ -10,8 +10,8 @@
     "key": "b"
   },
   {
-    "clazz": "gnote",
-    "run": "gnote",
+    "clazz": "gedit",
+    "run": "gedit",
     "key": "g"
   },
   {
